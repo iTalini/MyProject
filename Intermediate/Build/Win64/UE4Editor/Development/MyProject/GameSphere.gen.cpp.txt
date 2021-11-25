@@ -1,0 +1,15 @@
+D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Definitions.MyProject.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h
+D:\Unreal\projects\MyProject\Source\MyProject/GameSphere.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Classes\Components/SphereComponent.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Classes\Components/ShapeComponent.h
+D:\Unreal\catalog\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ShapeComponent.generated.h
+D:\Unreal\catalog\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\SphereComponent.generated.h
+D:\Unreal\catalog\UE_4.27\Engine\Plugins\Runtime\ApexDestruction\Source\ApexDestruction\Public\DestructibleComponent.h
+D:\Unreal\catalog\UE_4.27\Engine\Plugins\Runtime\ApexDestruction\Source\ApexDestruction\Public\ApexDestructionCustomPayload.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Public\CustomPhysXPayload.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Public\DestructibleInterface.h
+D:\Unreal\catalog\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\DestructibleInterface.generated.h
+D:\Unreal\catalog\UE_4.27\Engine\Plugins\Runtime\ApexDestruction\Intermediate\Build\Win64\UE4Editor\Inc\ApexDestruction\DestructibleComponent.generated.h
+D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Inc\MyProject\GameSphere.generated.h
