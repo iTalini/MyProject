@@ -1,0 +1,3 @@
+D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Definitions.MyProject.h
+D:\Unreal\projects\MyProject\Source\MyProject\MyWorldSubsystem.h
+D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Inc\MyProject\MyWorldSubsystem.generated.h

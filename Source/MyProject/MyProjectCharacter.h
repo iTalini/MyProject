@@ -89,6 +89,12 @@ public:
 
 protected:
 	
+	/*Save*/
+	void Save();
+
+	/*Load*/
+	void Load();
+
 	/** Fires a projectile. */
 	void OnFire();
 

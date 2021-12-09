@@ -37,6 +37,7 @@ public:
 	//by what value the material will change in tick
 	float for_changeMat;
 
+	float numberInVector;
 
 	//For function call timer 
 	FTimerHandle MessageKillTimerHandle;

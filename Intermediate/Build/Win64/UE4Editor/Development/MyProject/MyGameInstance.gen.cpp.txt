@@ -1,0 +1,5 @@
+D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Definitions.MyProject.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h
+D:\Unreal\projects\MyProject\Source\MyProject/MyGameInstance.h
+D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Inc\MyProject\MyGameInstance.generated.h

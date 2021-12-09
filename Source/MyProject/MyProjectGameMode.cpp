@@ -46,6 +46,7 @@ AMyProjectGameMode::AMyProjectGameMode()
 	min_sphere_dist = 80;
 
 	number_of_spheres = 15;
+	spheres_in_game = number_of_spheres;
 
 	numberOfSpheresToDestroy = 10;
 
@@ -53,23 +54,8 @@ AMyProjectGameMode::AMyProjectGameMode()
 
 	perc_more_RSpawnSpheres = 5;
 
+	SpheresColor = FLinearColor::Black;
 
-	useHiagaraSphere = false;
-}
-
-void AMyProjectGameMode::DestrAllGameSphere()
-{
-	TArray <AActor*> TA_Spheres;
-
-	UGameplayStatics::GetAllActorsOfClass(this, AGameSphere::StaticClass(), TA_Spheres);
-	for (AActor* A_Sphere : TA_Spheres)
-	{
-		AGameSphere* ScoreSphere = Cast<AGameSphere>(A_Sphere);
-		if (ScoreSphere)
-		{
-			ScoreSphere->Destroy();
-		}
-	}
 }
 
 void AMyProjectGameMode::DestrAllDisinSphere()
@@ -142,10 +128,12 @@ void AMyProjectGameMode::OnGameSphereDestroyed(AGameSphere* A_Sphere)
 void AMyProjectGameMode::OnSphereDisintegration(ADisintegrationSphere* A_Sphere)
 {
 	chars_score += score;
+	spheres_in_game--;
 	AMyProjectHUD* InGameHUD = Cast<AMyProjectHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 	if (InGameHUD)
 		InGameHUD->UpdateScore((int)chars_score);
 
+	V_SpheresLocation.Remove(A_Sphere->GetActorLocation());
 	float pointdist = PointDist(A_Sphere->GetTargetLocation(), SpawnPoint);
 
 
@@ -159,6 +147,7 @@ void AMyProjectGameMode::OnSphereDisintegration(ADisintegrationSphere* A_Sphere)
 
 	if (wasDestroySphereInArray >= numberOfSpheresToDestroy)
 	{
+		V_SpheresLocation.Empty();
 		waveNum++;
 		if (InGameHUD)
 			InGameHUD->UpdateWaveNum((int)waveNum);
@@ -170,6 +159,7 @@ void AMyProjectGameMode::OnSphereDisintegration(ADisintegrationSphere* A_Sphere)
 
 		current_r = (current_r / 100) * (100 - percent_next_r_less);
 		number_of_spheres = (number_of_spheres / 100) * (100 + perc_more_NumberOfSpheres);
+		spheres_in_game = number_of_spheres;
 		max_spawn_r = (max_spawn_r / 100) * (100 + perc_more_RSpawnSpheres);
 
 		while ((4 / 3) * pow(necessarily_destroy_r, 3) * PI < numberOfSpheresToDestroy * ((4 / 3) * PI * pow(min_sphere_dist / 1.5 + current_r, 3)))
@@ -184,34 +174,22 @@ void AMyProjectGameMode::SpawnNewSphere()
 	FRotator Rot(0.0f, 0.0f, 0.0f);
 	FActorSpawnParameters SpawnInfo;
 
-	FLinearColor NewSphereColor = FLinearColor::MakeRandomColor();
-	if (!useHiagaraSphere)
-	{
-		//destroy the remaining spheres on the scene 
-		DestrAllGameSphere();
+	SpheresColor = FLinearColor::MakeRandomColor();
 
-		//create and arrange spheres on the stage 
-		for (int i = 0; i < number_of_spheres; i++)
-		{
-			FVector Loc = LookNewSpawnPont(i);
-			AGameSphere* SpawnActor = GetWorld()->SpawnActor<AGameSphere>(ToSpawn_AGameSphere, Loc, Rot, SpawnInfo);
-			//change the color of the spheres
-			SpawnActor->DynMat->SetVectorParameterValue("BaseColor", NewSphereColor);
-		}
-	}
-	else
-	{
-		DestrAllDisinSphere();
+	DestrAllDisinSphere();
 
-		//create and arrange spheres on the stage 
-		for (int i = 0; i < number_of_spheres; i++)
-		{
-			FVector Loc = LookNewSpawnPont(i);
-			ADisintegrationSphere* SpawnActor = GetWorld()->SpawnActor<ADisintegrationSphere>(ToSpawn_ADisintegrationSphere, Loc, Rot, SpawnInfo);
-			//change the color of the spheres
-			SpawnActor->DynMat->SetVectorParameterValue("BaseColor", NewSphereColor);
-		}
+	//create and arrange spheres on the stage 
+	for (int i = 0; i < number_of_spheres; i++)
+	{
+		FVector Loc = LookNewSpawnPont(i);
+		ADisintegrationSphere* SpawnActor = GetWorld()->SpawnActor<ADisintegrationSphere>(ToSpawn_ADisintegrationSphere, Loc, Rot, SpawnInfo);
+		//change the color of the spheres
+		SpawnActor->DynMat->SetVectorParameterValue("BaseColor", SpheresColor);
+
+		V_SpheresLocation.Add(Loc);
+		//UE_LOG(LogTemp, Warning, TEXT("Spheres0: %i"), V_Spheres.Num());
 	}
+	//UE_LOG(LogTemp, Warning, TEXT("Spheres1: %i"), V_Spheres.Num());
 }
 
 FVector AMyProjectGameMode::LookNewSpawnPont(int i)
@@ -269,26 +247,16 @@ FVector AMyProjectGameMode::LookNewSpawnPont(int i)
 
 bool AMyProjectGameMode::CheckPreviousSpheres(FVector for_check)
 {
-	TArray <AActor*> TA_Spheres;
-
 	//find all spheres on the level and check the distance from each of them,
 	// if the distance from one distance is less than the required one => go back and change FVector 
-	if (!useHiagaraSphere)
+	TArray <AActor*> TA_Spheres;
+
+	UGameplayStatics::GetAllActorsOfClass(this, ADisintegrationSphere::StaticClass(), TA_Spheres);
+	for (AActor* A_Sphere : TA_Spheres)
 	{
-		UGameplayStatics::GetAllActorsOfClass(this, AGameSphere::StaticClass(), TA_Spheres);
-		for (AActor* A_Sphere : TA_Spheres)
+		ADisintegrationSphere* ScoreSphere = Cast<ADisintegrationSphere>(A_Sphere);
+		if (ScoreSphere)
 		{
-			AGameSphere* ScoreSphere = Cast<AGameSphere>(A_Sphere);
-			if (PointDist(for_check, ScoreSphere->GetActorLocation()) - current_r * 2 <= min_sphere_dist * min_sphere_dist)
-				return false;
-		}
-	}
-	else
-	{
-		UGameplayStatics::GetAllActorsOfClass(this, ADisintegrationSphere::StaticClass(), TA_Spheres);
-		for (AActor* A_Sphere : TA_Spheres)
-		{
-			ADisintegrationSphere* ScoreSphere = Cast<ADisintegrationSphere>(A_Sphere);
 			if (PointDist(for_check, ScoreSphere->GetActorLocation()) - current_r * 2 <= min_sphere_dist * min_sphere_dist)
 				return false;
 		}
@@ -323,6 +291,78 @@ float AMyProjectGameMode::Get_currentR()
 	return current_r;
 }
 
+void AMyProjectGameMode::SaveMode(UMySaveGame* Saver)
+{
+	Saver->SG_chars_score = chars_score;
+	Saver->SG_current_r = current_r;
+	Saver->SG_max_spawn_r = max_spawn_r;
+	Saver->SG_min_loc_z_forSphere = min_loc_z_forSphere;
+	Saver->SG_min_r = min_r;
+	Saver->SG_min_sphere_dist = min_sphere_dist;
+	Saver->SG_necessarily_destroy_r = necessarily_destroy_r;
+	Saver->SG_numberOfSpheresToDestroy = numberOfSpheresToDestroy;
+	Saver->SG_number_of_spheres = number_of_spheres;
+	Saver->SG_percent_next_r_less = percent_next_r_less;
+	Saver->SG_perc_more_NumberOfSpheres = perc_more_NumberOfSpheres;
+	Saver->SG_perc_more_RSpawnSpheres = perc_more_RSpawnSpheres;
+	Saver->SG_score = score;
+	Saver->SG_SpawnPoint = SpawnPoint;
+	Saver->SG_start_r = start_r;
+	Saver->SG_V_SpheresLocation = V_SpheresLocation;
+	Saver->SG_wasDestroy = wasDestroy;
+	Saver->SG_wasDestroySphereInArray = wasDestroySphereInArray;
+	Saver->SG_waveNum = waveNum;
+	Saver->SG_spheres_in_game = spheres_in_game;
+	Saver->SG_SpheresColor = SpheresColor;
+}
+
+void AMyProjectGameMode::LoadMode(UMySaveGame* Load)
+{
+	FActorSpawnParameters SpawnInfo;
+	FRotator Rot(0.0f, 0.0f, 0.0f);
+
+	chars_score = Load->SG_chars_score;
+	current_r = Load->SG_current_r;
+	max_spawn_r = Load->SG_max_spawn_r;
+	min_loc_z_forSphere = Load->SG_min_loc_z_forSphere;
+	min_r = Load->SG_min_r;
+	min_sphere_dist = Load->SG_min_sphere_dist;
+	necessarily_destroy_r = Load->SG_necessarily_destroy_r;
+	numberOfSpheresToDestroy = Load->SG_numberOfSpheresToDestroy;
+	number_of_spheres = Load->SG_number_of_spheres;
+	percent_next_r_less = Load->SG_percent_next_r_less;
+	perc_more_NumberOfSpheres = Load->SG_perc_more_NumberOfSpheres;
+	perc_more_RSpawnSpheres = Load->SG_perc_more_RSpawnSpheres;
+	score = Load->SG_score;
+	SpawnPoint = Load->SG_SpawnPoint;
+	start_r = Load->SG_start_r;
+	wasDestroy = Load->SG_wasDestroy;
+	wasDestroySphereInArray = Load->SG_wasDestroySphereInArray;
+	waveNum = Load->SG_waveNum;
+	spheres_in_game = Load->SG_spheres_in_game;
+	SpheresColor = Load->SG_SpheresColor;
+
+	AMyProjectHUD* InGameHUD = Cast<AMyProjectHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	if (InGameHUD)
+		InGameHUD->UpdateScore((int)chars_score);
+	if (InGameHUD)
+		InGameHUD->UpdateWaveNum((int)waveNum);
+
+	DestrAllDisinSphere();
+
+	V_SpheresLocation.Empty();
+
+	V_SpheresLocation = Load->SG_V_SpheresLocation;
+	
+	for (int i = 0; i < Load->SG_V_SpheresLocation.Num(); i++)
+	{
+
+		ADisintegrationSphere* SpawnActor = GetWorld()->SpawnActor<ADisintegrationSphere>(ToSpawn_ADisintegrationSphere, Load->SG_V_SpheresLocation[i], Rot, SpawnInfo);
+		SpawnActor->DynMat->SetVectorParameterValue("BaseColor", SpheresColor);
+
+	}
+}
+
 void AMyProjectGameMode::BeginPlay()
 {
 	Player = Cast<AMyProjectCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
@@ -335,26 +375,17 @@ void AMyProjectGameMode::BeginPlay()
 	//Set the first spawn center for the spheres 
 	SpawnPoint = Player->GetTargetLocation();
 
+	SpheresColor = FLinearColor::MakeRandomColor();
 
 	FRotator Rot(0.0f, 0.0f, 0.0f);
 	FActorSpawnParameters SpawnInfo;
 
-	if (!useHiagaraSphere)
-	{
 		//create and arrange spheres on the stage 
-		for (int i = 0; i < number_of_spheres; i++)
-		{
-			FVector Loc = LookNewSpawnPont(i);
-			AGameSphere* SpawnActor = GetWorld()->SpawnActor<AGameSphere>(ToSpawn_AGameSphere, Loc, Rot, SpawnInfo);
-		}
-	}
-	else
+	for (int i = 0; i < number_of_spheres; i++)
 	{
-		//create and arrange spheres on the stage 
-		for (int i = 0; i < number_of_spheres; i++)
-		{
-			FVector Loc = LookNewSpawnPont(i);
-			ADisintegrationSphere* SpawnActor = GetWorld()->SpawnActor<ADisintegrationSphere>(ToSpawn_ADisintegrationSphere, Loc, Rot, SpawnInfo);
-		}
+		FVector Loc = LookNewSpawnPont(i);
+		ADisintegrationSphere* SpawnActor = GetWorld()->SpawnActor<ADisintegrationSphere>(ToSpawn_ADisintegrationSphere, Loc, Rot, SpawnInfo);
+		SpawnActor->numberInVector = i;
+		V_SpheresLocation.Add(Loc);
 	}
 }

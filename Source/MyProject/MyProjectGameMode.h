@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameSphere.h"
+#include "MySaveGame.h"
 #include "DisintegrationSphere.h"
 #include "MyProjectCharacter.h"
 #include "GameFramework/GameModeBase.h"
@@ -16,9 +17,6 @@ class AMyProjectGameMode : public AGameModeBase
 
 public:
 	AMyProjectGameMode();
-
-	UFUNCTION(BlueprintCallable)
-		void DestrAllGameSphere();
 
 	UFUNCTION(BlueprintCallable)
 		void DestrAllDisinSphere();
@@ -55,10 +53,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float PointDist(FVector one, FVector two);
 
-	//What kinde of sphere we are useing for?
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GameSphere)
-		bool useHiagaraSphere;
 
+	UPROPERTY(EditAnywhere, Category = Spheres)
+		TArray<FVector> V_SpheresLocation;
+
+	UPROPERTY(EditAnywhere, Category = Spheres)
+		FLinearColor SpheresColor;
 
 
 
@@ -124,6 +124,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = Spawn)
 		float number_of_spheres;
 
+	UPROPERTY(EditAnywhere, Category = Spawn)
+		float spheres_in_game;
+
 	//the number of spheres that need to be destroyed during the current wave in the required radius 
 	UPROPERTY(EditAnywhere, Category = Spawn)
 		float numberOfSpheresToDestroy;
@@ -136,8 +139,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = Spawn)
 		float perc_more_RSpawnSpheres;
 
-	UPROPERTY(EditDefaultsOnly, Category = Spawning)
-		TSubclassOf<AGameSphere> ToSpawn_AGameSphere;
 
 	UPROPERTY(EditDefaultsOnly, Category = Spawning)
 		TSubclassOf<ADisintegrationSphere> ToSpawn_ADisintegrationSphere;
@@ -149,6 +150,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		float Get_currentR();
+
+	UFUNCTION(BlueprintCallable)
+		void SaveMode(UMySaveGame* Saver);
+
+	UFUNCTION(BlueprintCallable)
+		void LoadMode(UMySaveGame* Load);
 
 protected:
 	virtual void BeginPlay() override;

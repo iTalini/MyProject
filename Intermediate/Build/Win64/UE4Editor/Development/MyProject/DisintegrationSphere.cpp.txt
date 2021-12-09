@@ -14,6 +14,10 @@ D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Public\DestructibleInterf
 D:\Unreal\catalog\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\DestructibleInterface.generated.h
 D:\Unreal\catalog\UE_4.27\Engine\Plugins\Runtime\ApexDestruction\Intermediate\Build\Win64\UE4Editor\Inc\ApexDestruction\DestructibleComponent.generated.h
 D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Inc\MyProject\GameSphere.generated.h
+D:\Unreal\projects\MyProject\Source\MyProject\MySaveGame.h
+D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Classes\GameFramework/SaveGame.h
+D:\Unreal\catalog\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\SaveGame.generated.h
+D:\Unreal\projects\MyProject\Intermediate\Build\Win64\UE4Editor\Inc\MyProject\MySaveGame.generated.h
 D:\Unreal\projects\MyProject\Source\MyProject\MyProjectCharacter.h
 D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Classes\GameFramework/Character.h
 D:\Unreal\catalog\UE_4.27\Engine\Source\Runtime\Engine\Classes\GameFramework/CharacterMovementReplication.h

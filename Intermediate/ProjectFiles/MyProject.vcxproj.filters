@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\MyProject.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{FB8BFABF-2A35-40DE-AC78-493065E72E50}</UniqueIdentifier>
+      <UniqueIdentifier>{A69E63D2-44F2-460D-BD69-C607639809AD}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\MyProject.Target.cs">
       <Filter>Source</Filter>
@@ -11,8 +11,10 @@
     <None Include="..\..\Source\MyProjectEditor.Target.cs">
       <Filter>Source</Filter>
     </None>
+    <None Include="..\..\.gitattributes" />
+    <None Include="..\..\.gitignore" />
     <Filter Include="Config">
-      <UniqueIdentifier>{A651DE8B-2BBF-4319-851A-06D7468A08C5}</UniqueIdentifier>
+      <UniqueIdentifier>{76C551E5-C324-455D-94E8-CA10A094AB7F}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -30,12 +32,24 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\MyProject">
-      <UniqueIdentifier>{DE11F491-D829-486B-98EC-BB918E6CF268}</UniqueIdentifier>
+      <UniqueIdentifier>{C5385DF0-77A6-4C26-AF59-980651F1FE37}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\MyProject\DisintegrationSphere.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\DisintegrationSphere.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\MyProject\GameSphere.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\MyProject\GameSphere.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\MyProject\MyGameInstance.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\MyGameInstance.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\MyProject\MyHUD.cpp">
@@ -77,16 +91,16 @@
     <ClInclude Include="..\..\Source\MyProject\MyProjectProjectile.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\MyProject\MySaveGame.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\MySaveGame.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\MyProject\MyUserWidget.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\MyProject\MyUserWidget.h">
-      <Filter>Source\MyProject</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\MyProject\DisintegrationSphere.cpp">
-      <Filter>Source\MyProject</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\MyProject\DisintegrationSphere.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
   </ItemGroup>

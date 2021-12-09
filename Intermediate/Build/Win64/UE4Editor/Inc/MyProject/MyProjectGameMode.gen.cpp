@@ -18,11 +18,29 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 	ENGINE_API UClass* Z_Construct_UClass_AGameModeBase();
 	UPackage* Z_Construct_UPackage__Script_MyProject();
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
+	MYPROJECT_API UClass* Z_Construct_UClass_UMySaveGame_NoRegister();
 	MYPROJECT_API UClass* Z_Construct_UClass_AGameSphere_NoRegister();
 	MYPROJECT_API UClass* Z_Construct_UClass_ADisintegrationSphere_NoRegister();
+	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FLinearColor();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 	MYPROJECT_API UClass* Z_Construct_UClass_AMyProjectCharacter_NoRegister();
 // End Cross Module References
+	DEFINE_FUNCTION(AMyProjectGameMode::execLoadMode)
+	{
+		P_GET_OBJECT(UMySaveGame,Z_Param_Load);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->LoadMode(Z_Param_Load);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(AMyProjectGameMode::execSaveMode)
+	{
+		P_GET_OBJECT(UMySaveGame,Z_Param_Saver);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->SaveMode(Z_Param_Saver);
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(AMyProjectGameMode::execGet_currentR)
 	{
 		P_FINISH;
@@ -102,13 +120,6 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		P_THIS->DestrAllDisinSphere();
 		P_NATIVE_END;
 	}
-	DEFINE_FUNCTION(AMyProjectGameMode::execDestrAllGameSphere)
-	{
-		P_FINISH;
-		P_NATIVE_BEGIN;
-		P_THIS->DestrAllGameSphere();
-		P_NATIVE_END;
-	}
 	void AMyProjectGameMode::StaticRegisterNativesAMyProjectGameMode()
 	{
 		UClass* Class = AMyProjectGameMode::StaticClass();
@@ -116,13 +127,14 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 			{ "Change_necessarily_destroy_r", &AMyProjectGameMode::execChange_necessarily_destroy_r },
 			{ "CheckPreviousSpheres", &AMyProjectGameMode::execCheckPreviousSpheres },
 			{ "DestrAllDisinSphere", &AMyProjectGameMode::execDestrAllDisinSphere },
-			{ "DestrAllGameSphere", &AMyProjectGameMode::execDestrAllGameSphere },
 			{ "Get_currentR", &AMyProjectGameMode::execGet_currentR },
+			{ "LoadMode", &AMyProjectGameMode::execLoadMode },
 			{ "LookNewSpawnPont", &AMyProjectGameMode::execLookNewSpawnPont },
 			{ "OnGameSphereDestroyed", &AMyProjectGameMode::execOnGameSphereDestroyed },
 			{ "OnSphereDisintegration", &AMyProjectGameMode::execOnSphereDisintegration },
 			{ "PointDist", &AMyProjectGameMode::execPointDist },
 			{ "RandFVector", &AMyProjectGameMode::execRandFVector },
+			{ "SaveMode", &AMyProjectGameMode::execSaveMode },
 			{ "SpawnNewSphere", &AMyProjectGameMode::execSpawnNewSphere },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
@@ -216,28 +228,6 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere_Statics
-	{
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
-#endif
-		static const UE4CodeGen_Private::FFunctionParams FuncParams;
-	};
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere_Statics::Function_MetaDataParams[] = {
-		{ "ModuleRelativePath", "MyProjectGameMode.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AMyProjectGameMode, nullptr, "DestrAllGameSphere", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere()
-	{
-		static UFunction* ReturnFunction = nullptr;
-		if (!ReturnFunction)
-		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere_Statics::FuncParams);
-		}
-		return ReturnFunction;
-	}
 	struct Z_Construct_UFunction_AMyProjectGameMode_Get_currentR_Statics
 	{
 		struct MyProjectGameMode_eventGet_currentR_Parms
@@ -267,6 +257,38 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AMyProjectGameMode_Get_currentR_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics
+	{
+		struct MyProjectGameMode_eventLoadMode_Parms
+		{
+			UMySaveGame* Load;
+		};
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Load;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::NewProp_Load = { "Load", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(MyProjectGameMode_eventLoadMode_Parms, Load), Z_Construct_UClass_UMySaveGame_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::NewProp_Load,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "MyProjectGameMode.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AMyProjectGameMode, nullptr, "LoadMode", nullptr, nullptr, sizeof(MyProjectGameMode_eventLoadMode_Parms), Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AMyProjectGameMode_LoadMode()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AMyProjectGameMode_LoadMode_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -462,6 +484,38 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics
+	{
+		struct MyProjectGameMode_eventSaveMode_Parms
+		{
+			UMySaveGame* Saver;
+		};
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Saver;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::NewProp_Saver = { "Saver", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(MyProjectGameMode_eventSaveMode_Parms, Saver), Z_Construct_UClass_UMySaveGame_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::NewProp_Saver,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "MyProjectGameMode.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AMyProjectGameMode, nullptr, "SaveMode", nullptr, nullptr, sizeof(MyProjectGameMode_eventSaveMode_Parms), Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AMyProjectGameMode_SaveMode()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AMyProjectGameMode_SaveMode_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_AMyProjectGameMode_SpawnNewSphere_Statics
 	{
 #if WITH_METADATA
@@ -495,11 +549,15 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_V_SpheresLocation_Inner;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_useHiagaraSphere_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_V_SpheresLocation_MetaData[];
 #endif
-		static void NewProp_useHiagaraSphere_SetBit(void* Obj);
-		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_useHiagaraSphere;
+		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_V_SpheresLocation;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SpheresColor_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_SpheresColor;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_score_MetaData[];
 #endif
@@ -561,6 +619,10 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_number_of_spheres;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_spheres_in_game_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_spheres_in_game;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_numberOfSpheresToDestroy_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_numberOfSpheresToDestroy;
@@ -572,10 +634,6 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_perc_more_RSpawnSpheres_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_perc_more_RSpawnSpheres;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ToSpawn_AGameSphere_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FClassPropertyParams NewProp_ToSpawn_AGameSphere;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ToSpawn_ADisintegrationSphere_MetaData[];
 #endif
@@ -596,13 +654,14 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		{ &Z_Construct_UFunction_AMyProjectGameMode_Change_necessarily_destroy_r, "Change_necessarily_destroy_r" }, // 3303394272
 		{ &Z_Construct_UFunction_AMyProjectGameMode_CheckPreviousSpheres, "CheckPreviousSpheres" }, // 528326477
 		{ &Z_Construct_UFunction_AMyProjectGameMode_DestrAllDisinSphere, "DestrAllDisinSphere" }, // 676214663
-		{ &Z_Construct_UFunction_AMyProjectGameMode_DestrAllGameSphere, "DestrAllGameSphere" }, // 3408177184
 		{ &Z_Construct_UFunction_AMyProjectGameMode_Get_currentR, "Get_currentR" }, // 4120870322
+		{ &Z_Construct_UFunction_AMyProjectGameMode_LoadMode, "LoadMode" }, // 2299992301
 		{ &Z_Construct_UFunction_AMyProjectGameMode_LookNewSpawnPont, "LookNewSpawnPont" }, // 2976651675
 		{ &Z_Construct_UFunction_AMyProjectGameMode_OnGameSphereDestroyed, "OnGameSphereDestroyed" }, // 3661215447
 		{ &Z_Construct_UFunction_AMyProjectGameMode_OnSphereDisintegration, "OnSphereDisintegration" }, // 2244540526
 		{ &Z_Construct_UFunction_AMyProjectGameMode_PointDist, "PointDist" }, // 1311238577
 		{ &Z_Construct_UFunction_AMyProjectGameMode_RandFVector, "RandFVector" }, // 1783250895
+		{ &Z_Construct_UFunction_AMyProjectGameMode_SaveMode, "SaveMode" }, // 541120656
 		{ &Z_Construct_UFunction_AMyProjectGameMode_SpawnNewSphere, "SpawnNewSphere" }, // 947188346
 	};
 #if WITH_METADATA
@@ -613,19 +672,21 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		{ "ShowCategories", "Input|MouseInput Input|TouchInput" },
 	};
 #endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_V_SpheresLocation_Inner = { "V_SpheresLocation", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(nullptr, 0) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_useHiagaraSphere_MetaData[] = {
-		{ "Category", "GameSphere" },
-		{ "Comment", "//What kinde of sphere we are useing for?\n" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_V_SpheresLocation_MetaData[] = {
+		{ "Category", "Spheres" },
 		{ "ModuleRelativePath", "MyProjectGameMode.h" },
-		{ "ToolTip", "What kinde of sphere we are useing for?" },
 	};
 #endif
-	void Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_useHiagaraSphere_SetBit(void* Obj)
-	{
-		((AMyProjectGameMode*)Obj)->useHiagaraSphere = 1;
-	}
-	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_useHiagaraSphere = { "useHiagaraSphere", nullptr, (EPropertyFlags)0x0010000000010015, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AMyProjectGameMode), &Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_useHiagaraSphere_SetBit, METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_useHiagaraSphere_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_useHiagaraSphere_MetaData)) };
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_V_SpheresLocation = { "V_SpheresLocation", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMyProjectGameMode, V_SpheresLocation), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_V_SpheresLocation_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_V_SpheresLocation_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_SpheresColor_MetaData[] = {
+		{ "Category", "Spheres" },
+		{ "ModuleRelativePath", "MyProjectGameMode.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_SpheresColor = { "SpheresColor", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMyProjectGameMode, SpheresColor), Z_Construct_UScriptStruct_FLinearColor, METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_SpheresColor_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_SpheresColor_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_score_MetaData[] = {
 		{ "Category", "Score" },
@@ -762,6 +823,13 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 #endif
 	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_number_of_spheres = { "number_of_spheres", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMyProjectGameMode, number_of_spheres), METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_number_of_spheres_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_number_of_spheres_MetaData)) };
 #if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_spheres_in_game_MetaData[] = {
+		{ "Category", "Spawn" },
+		{ "ModuleRelativePath", "MyProjectGameMode.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_spheres_in_game = { "spheres_in_game", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMyProjectGameMode, spheres_in_game), METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_spheres_in_game_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_spheres_in_game_MetaData)) };
+#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_numberOfSpheresToDestroy_MetaData[] = {
 		{ "Category", "Spawn" },
 		{ "Comment", "//the number of spheres that need to be destroyed during the current wave in the required radius \n" },
@@ -789,13 +857,6 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 #endif
 	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_perc_more_RSpawnSpheres = { "perc_more_RSpawnSpheres", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMyProjectGameMode, perc_more_RSpawnSpheres), METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_perc_more_RSpawnSpheres_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_perc_more_RSpawnSpheres_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_ToSpawn_AGameSphere_MetaData[] = {
-		{ "Category", "Spawning" },
-		{ "ModuleRelativePath", "MyProjectGameMode.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_ToSpawn_AGameSphere = { "ToSpawn_AGameSphere", nullptr, (EPropertyFlags)0x0014000000010001, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMyProjectGameMode, ToSpawn_AGameSphere), Z_Construct_UClass_AGameSphere_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_ToSpawn_AGameSphere_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_ToSpawn_AGameSphere_MetaData)) };
-#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_ToSpawn_ADisintegrationSphere_MetaData[] = {
 		{ "Category", "Spawning" },
 		{ "ModuleRelativePath", "MyProjectGameMode.h" },
@@ -811,7 +872,9 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_Player = { "Player", nullptr, (EPropertyFlags)0x0010000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMyProjectGameMode, Player), Z_Construct_UClass_AMyProjectCharacter_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_Player_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_Player_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AMyProjectGameMode_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_useHiagaraSphere,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_V_SpheresLocation_Inner,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_V_SpheresLocation,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_SpheresColor,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_score,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_chars_score,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_start_r,
@@ -827,10 +890,10 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_SpawnPoint,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_min_sphere_dist,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_number_of_spheres,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_spheres_in_game,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_numberOfSpheresToDestroy,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_perc_more_NumberOfSpheres,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_perc_more_RSpawnSpheres,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_ToSpawn_AGameSphere,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_ToSpawn_ADisintegrationSphere,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMyProjectGameMode_Statics::NewProp_Player,
 	};
@@ -861,7 +924,7 @@ void EmptyLinkFunctionForGeneratedCodeMyProjectGameMode() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AMyProjectGameMode, 2749188050);
+	IMPLEMENT_CLASS(AMyProjectGameMode, 2986935927);
 	template<> MYPROJECT_API UClass* StaticClass<AMyProjectGameMode>()
 	{
 		return AMyProjectGameMode::StaticClass();

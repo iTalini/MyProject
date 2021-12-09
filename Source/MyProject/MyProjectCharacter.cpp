@@ -2,6 +2,8 @@
 
 #include "MyProjectCharacter.h"
 #include "MyProjectProjectile.h"
+#include "MySaveGame.h"
+#include "MyProjectGameMode.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -113,6 +115,11 @@ void AMyProjectCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	// set up gameplay key bindings
 	check(PlayerInputComponent);
 
+	//Bind save event
+	PlayerInputComponent->BindAction("SaveGame", IE_Pressed, this, &AMyProjectCharacter::Save);
+	//Bind load event
+	PlayerInputComponent->BindAction("LoadGame", IE_Pressed, this, &AMyProjectCharacter::Load);
+
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -136,6 +143,35 @@ void AMyProjectCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("TurnRate", this, &AMyProjectCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AMyProjectCharacter::LookUpAtRate);
+}
+
+void AMyProjectCharacter::Save()
+{
+	if (UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass())))
+	{
+		//Load Game Save
+		AMyProjectGameMode* MyMode = GetWorld()->GetAuthGameMode<AMyProjectGameMode>();
+		MyMode->SaveMode(SaveGameInstance);
+		//Save Actor
+		SaveGameInstance->PlayerLocation = this->GetActorLocation();
+		if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("SaveSloteName"), 0))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Saved"));
+		}
+	}
+}
+
+void AMyProjectCharacter::Load()
+{
+	if (UMySaveGame* LoadedGame = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("SaveSloteName"), 0)))
+	{
+		//Load Game Mode
+		AMyProjectGameMode* MyMode = GetWorld()->GetAuthGameMode<AMyProjectGameMode>();
+		MyMode->LoadMode(LoadedGame);
+		//Load Actor
+		this->SetActorLocation(LoadedGame->PlayerLocation);
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Load"));
+	}
 }
 
 void AMyProjectCharacter::OnFire()
